@@ -1,0 +1,48 @@
+version: "3"
+ 
+services:
+  microService:
+    image: tinkouka_docker:1.6
+    container_name: ms01
+    ports:
+      - "6001:6001"
+    volumes:
+      - /app/microService:/data
+    networks: 
+      - cjh_net 
+    depends_on: 
+      - redis
+      - mysql
+ 
+  redis:
+    image: redis:6.0.8
+    ports:
+      - "6379:6379"
+    volumes:
+      - /app/redis/redis.conf:/etc/redis/redis.conf
+      - /app/redis/data:/data
+    networks: 
+      - cjh_net
+    command: redis-server /etc/redis/redis.conf
+ 
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: 'mysql'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'no'
+      MYSQL_DATABASE: 'db2021'
+      MYSQL_USER: 'cjh'
+      MYSQL_PASSWORD: 'cjh123'
+    ports:
+       - "3326:3306"
+    volumes:
+       - /tinkouka/mysql/conf:/etc/mysql/conf.d
+       - /tinkouka/mysql/logs:/logs
+       - /tinkouka/mysql/data:/var/lib/mysql
+    networks:
+      - cjh_net
+    command: --default-authentication-plugin=mysql_native_password #解决外部无法访问
+ 
+networks: 
+   cjh_net: 
+ 
