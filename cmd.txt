@@ -36,7 +36,7 @@ docker-compose up
 OR
 docker-compose up -d
 
-③
+③mysqlのインスタンスに入ってdatabaseとtableをcreate
 docker exec -it 容器实例id /bin/bash
 mysql -uroot -p
 create database db2021;
